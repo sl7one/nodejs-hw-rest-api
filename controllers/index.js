@@ -11,6 +11,10 @@ const getCurrentUser = require('./users/getCurrentUser');
 const logout = require('./users/logout');
 const subscription = require('./users/subscription');
 const updateAvatar = require('./users/updateAvatar');
+const getSmsCode = require('./users/getSmsCode');
+const verifyBySmsCode = require('./users/verifyByCode');
+const verifyByEmail = require('./users/verifyByEmail');
+const verifyResendEmail = require('./users/verifyResendEmail');
 
 module.exports = {
   getAllContacts,
@@ -26,4 +30,8 @@ module.exports = {
   logout,
   subscription,
   updateAvatar,
+  getSmsCode,
+  verifyBySmsCode,
+  verifyByEmail,
+  verifyResendEmail,
 };
