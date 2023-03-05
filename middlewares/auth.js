@@ -1,4 +1,10 @@
-const { User, schemaLogin, registerSchema, subscriptionSchema } = require('../models/users');
+const {
+  User,
+  schemaLogin,
+  registerSchema,
+  subscriptionSchema,
+  schemaEmail,
+} = require('../models/users');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { isValidObjectId } = require('mongoose');
@@ -42,6 +48,15 @@ const login = async (req, res, next) => {
     next(err);
   }
 
+  const { _id, verify } = user;
+
+  if (!verify) {
+    const err = new Error();
+    err.status = 401;
+    err.message = `Email not verify`;
+    next(err);
+  }
+
   const passCompare = bcrypt.compareSync(password, user.password);
 
   if (!passCompare) {
@@ -51,7 +66,6 @@ const login = async (req, res, next) => {
     next(err);
   }
 
-  const { _id } = user;
   req.userId = _id;
   next();
 };
@@ -113,4 +127,13 @@ const subscription = (req, res, next) => {
   next();
 };
 
-module.exports = { auth, id, register, login, subscription };
+const email = (req, res, next) => {
+  const { error } = schemaEmail.validate(req.body);
+  if (error) {
+    error.status = 400;
+    next(error);
+  }
+  next();
+};
+
+module.exports = { auth, id, register, login, subscription, email };
